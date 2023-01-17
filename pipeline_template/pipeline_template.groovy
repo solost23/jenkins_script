@@ -14,6 +14,8 @@ def project_path = "/Users/ty/${project_name_local}"
 def report_template_path = "/Users/ty/jenkins_script/lark_message/lark_message"
 def build_result_path = "/Users/ty/jenkins_script/lark_message/complate_or_fail"
 
+def app = "后端"
+
 pipeline {
     agent{
         label "master"
@@ -75,7 +77,7 @@ pipeline {
                 ${report_template_path}/lark_message -filename ${report_template_path}/message_template.json -number $BUILD_NUMBER -url $JOB_URL -name $JOB_NAME
                 """
                 sh """
-                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 成功
+                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app ${app} -name $JOB_NAME -result 成功
                 """
             }
 
@@ -83,7 +85,7 @@ pipeline {
         failure{
             script{
                 sh """
-                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 失败
+                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app ${app} -name $JOB_NAME -result 失败
                 """
             }
         }
