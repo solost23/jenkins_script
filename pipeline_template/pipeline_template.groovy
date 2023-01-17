@@ -6,6 +6,7 @@ def git_address = "git@github.com:solost23/twitta.git"
 def git_branch = "develop"
 def project_name = "twitta"
 def project_name_local = "twitta"
+def project_path = "/Users/ty/${project_name_local}"
 
 pipeline {
     agent{
@@ -27,8 +28,8 @@ pipeline {
                 sh """
                 export GOPROXY=https://goproxy.cn/
                 /Users/ty/go/go1.19.4/bin/go version
-                /Users/ty/go/go1.19.4/bin/go build -o ${project_name_local} ./cmd/${project_name}/main.go
-                cp ${project_name_local} /Users/ty/${project_name_local}/${project_name_local}
+                /Users/ty/go/go1.19.4/bin/go build -o ${project_name_local} ./cmd/main.go
+                cp ${project_name_local} ${project_path}/${project_name_local}
                 """
             }
         }
@@ -48,7 +49,7 @@ pipeline {
                 }
 
                 sh """
-                JENKINS_NODE_COOKIE=dontKillMe nohup /Users/ty/${project_name_local}/${project_name_local} -d /Users/ty/${project_name_local} &
+                JENKINS_NODE_COOKIE=dontKillMe nohup ${project_path}/${project_name_local} -d ${project_path} &
                 """
             }
         }
