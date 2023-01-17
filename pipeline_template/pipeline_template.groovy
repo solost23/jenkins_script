@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 // 注意: 有些项目名ps查询会返回多个东西，此时采取一个中间变量替换project_name即可，这里采用project_name_local作为部署实际项目名称
-// 运行项目时默认会读取从git上拉下来的配置，下一步考虑怎么指定自己的配置
+// 运行项目时默认会读取从git上拉下来的配置，如果想让项目读取自己写的配置，可以采取的一个方式是指定项目工作目录，然后在项目里拼接配置文件地址，运行项目时传送项目目录参数即可
 def git_address = "git@github.com:solost23/twitta.git"
 def git_branch = "develop"
 def project_name = "twitta"
@@ -48,7 +48,7 @@ pipeline {
                 }
 
                 sh """
-                JENKINS_NODE_COOKIE=dontKillMe nohup /Users/ty/${project_name_local}/${project_name_local} &
+                JENKINS_NODE_COOKIE=dontKillMe nohup /Users/ty/${project_name_local}/${project_name_local} -d /Users/ty/${project_name_local} &
                 """
             }
         }
