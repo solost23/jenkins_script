@@ -15,8 +15,8 @@ func main() {
 	var jobUrl, jobName, buildNumber, fileName string
 	flag.StringVar(&jobUrl, "url", "", "项目url")
 	flag.StringVar(&jobName, "name", "", "项目名称")
-	flag.StringVar(&buildNumber, "number", "", "构建次数")
-	flag.StringVar(&fileName, "filename", "", "模板文件名")
+	flag.StringVar(&buildNumber, "number", "1", "构建次数")
+	flag.StringVar(&fileName, "filename", "./message_template.json", "模板文件名")
 	flag.Parse()
 
 	data, err := buildLarkMessage(fileName, time.Now(), jobUrl, jobName, buildNumber)
