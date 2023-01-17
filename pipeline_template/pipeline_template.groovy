@@ -61,14 +61,19 @@ pipeline {
         success{
             script{
                 sh """
-                /Users/ty/server/jenkins_build_test/lark_message/lark_message -filename /Users/ty/server/jenkins_build_test/lark_message/message_template.json -number $BUILD_NUMBER -url $JOB_URL -name $JOB_NAME
+                /Users/ty/jenkins_script/lark_message/lark_message/lark_message -filename /Users/ty/jenkins_script/lark_message/lark_message/message_template.json -number $BUILD_NUMBER -url $JOB_URL -name $JOB_NAME
+                """
+                sh """
+                /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail -filename /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 成功
                 """
             }
 
         }
         failure{
             script{
-                println("流水线失败后，要做的事情")
+                sh """
+                /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail -filename /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 失败
+                """
             }
         }
 
