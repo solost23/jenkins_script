@@ -1,8 +1,11 @@
 #!/usr/bin/env groovy
 
-def git_address = "git@github.com:solost23/jenkins_build_test.git"
+// 注意: 有些项目名ps查询会返回多个东西，此时采取一个中间变量替换project_name即可，这里采用project_name_local作为部署实际项目名称
+// 运行项目时默认会读取从git上拉下来的配置，下一步考虑怎么指定自己的配置
+def git_address = "git@github.com:solost23/twitta.git"
 def git_branch = "develop"
-
+def project_name = "twitta"
+def project_name_local = "twitta"
 
 pipeline {
     agent{
@@ -22,10 +25,10 @@ pipeline {
         stage('3.编译程序'){
             steps {
                 sh """
-                    export GOPROXY=https://goproxy.cn/
-                    /Users/ty/go/go1.19.4/bin/go version
-                    /Users/ty/go/go1.19.4/bin/go build -o jenkins_build_test main.go
-            cp jenkins_build_test /Users/ty/jenkins_build_test
+                export GOPROXY=https://goproxy.cn/
+                /Users/ty/go/go1.19.4/bin/go version
+                /Users/ty/go/go1.19.4/bin/go build -o ${project_name_local} ./cmd/${project_name}/main.go
+                cp ${project_name_local} /Users/ty/${project_name_local}/${project_name_local}
                 """
             }
         }
@@ -33,19 +36,19 @@ pipeline {
         stage('4.部署程序'){
             steps {
                 script{
-                    PROCESS_ID = sh(script: "ps -ef|grep jenkins_build_test|grep -v grep|awk \'{print \$2}\'", returnStdout: true).trim()
+                    PROCESS_ID = sh(script: "ps -ef|grep ${project_name_local}|grep -v grep|awk \'{print \$2}\'", returnStdout: true).trim()
                     echo "${PROCESS_ID}"
 
                     if (PROCESS_ID != "") {
                         sh """
-                             echo "Kill process: ${PROCESS_ID}"
-                             kill -9 ${PROCESS_ID}
-                            """
+                        echo "Kill process: ${PROCESS_ID}"
+                        kill -9 ${PROCESS_ID}
+                        """
                     }
                 }
 
                 sh """
-                JENKINS_NODE_COOKIE=dontKillMe nohup /Users/ty/jenkins_build_test/jenkins_build_test &
+                JENKINS_NODE_COOKIE=dontKillMe nohup /Users/ty/${project_name_local}/${project_name_local} &
                 """
             }
         }
