@@ -4,9 +4,15 @@
 // 运行项目时默认会读取从git上拉下来的配置，如果想让项目读取自己写的配置，可以采取的一个方式是指定项目工作目录，然后在项目里拼接配置文件地址，运行项目时传送项目目录参数即可
 def git_address = "git@github.com:solost23/twitta.git"
 def git_branch = "develop"
+
 def project_name = "twitta"
+
 def project_name_local = "twitta"
 def project_path = "/Users/ty/${project_name_local}"
+
+// 发送飞书报告脚本路径
+def report_template_path = "/Users/ty/jenkins_script/lark_message/lark_message"
+def build_result_path = "/Users/ty/jenkins_script/lark_message/complate_or_fail"
 
 pipeline {
     agent{
@@ -29,7 +35,8 @@ pipeline {
                 export GOPROXY=https://goproxy.cn/
                 /Users/ty/go/go1.19.4/bin/go version
                 /Users/ty/go/go1.19.4/bin/go build -o ${project_name_local} ./cmd/main.go
-                cp ${project_name_local} ${project_path}/${project_name_local}
+                rm -rf ./configs
+                cp -rf ./ ${project_path}/
                 """
             }
         }
@@ -65,10 +72,10 @@ pipeline {
         success{
             script{
                 sh """
-                /Users/ty/jenkins_script/lark_message/lark_message/lark_message -filename /Users/ty/jenkins_script/lark_message/lark_message/message_template.json -number $BUILD_NUMBER -url $JOB_URL -name $JOB_NAME
+                ${report_template_path}/lark_message -filename ${report_template_path}/message_template.json -number $BUILD_NUMBER -url $JOB_URL -name $JOB_NAME
                 """
                 sh """
-                /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail -filename /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 成功
+                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 成功
                 """
             }
 
@@ -76,7 +83,7 @@ pipeline {
         failure{
             script{
                 sh """
-                /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail -filename /Users/ty/jenkins_script/lark_message/complate_or_fail/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 失败
+                ${build_result_path}/complate_or_fail -filename ${build_result_path}/complate_or_fail_template.json -app 后端 -name $JOB_NAME -result 失败
                 """
             }
         }
