@@ -1,0 +1,34 @@
+{
+  "msg_type": "interactive",
+  "card": {
+    "config": {
+      "wide_screen_mode": true,
+      "enable_forward": true
+    },
+    "elements": [{
+      "tag": "div",
+      "text": {
+        "content": "项目名称：%s\n构建编号：第%s次构建\n运行时间：%s",
+        "tag": "lark_md"
+      }
+    }, {
+      "actions": [{
+        "tag": "button",
+        "text": {
+          "content": "查看报告",
+          "tag": "lark_md"
+        },
+        "url": "%s",
+        "type": "default",
+        "value": {}
+      }],
+      "tag": "action"
+    }],
+    "header": {
+      "title": {
+        "content": "%s 构建报告",
+        "tag": "plain_text"
+      }
+    }
+  }
+}
