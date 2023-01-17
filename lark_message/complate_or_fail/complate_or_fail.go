@@ -21,7 +21,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
-	fmt.Println(data)
 	url := "https://open.feishu.cn/open-apis/bot/v2/hook/979dc01e-3506-4c8c-8f65-bda4c0116625"
 	resp, err := http.Post(url, "application/json", strings.NewReader(data))
 	if err != nil {
