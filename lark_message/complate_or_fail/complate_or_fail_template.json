@@ -1,16 +1,6 @@
 {
-  "msg_type": "interactive",
-  "card": {
-    "config": {
-      "wide_screen_mode": true,
-      "enable_forward": true
-    },
-    "elements": [{
-      "tag": "div",
-      "text": {
-        "content": "%s %s 构建%s",
-        "tag": "lark_md"
-      }
-    }]
+  "msg_type": "text",
+  "content": {
+    "text": "%s %s 构建%s"
   }
 }
